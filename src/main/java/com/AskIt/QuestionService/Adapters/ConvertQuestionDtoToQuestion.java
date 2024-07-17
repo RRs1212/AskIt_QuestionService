@@ -39,15 +39,18 @@ public class ConvertQuestionDtoToQuestion implements ConvertToQuestion{
         if(user.isPresent()){
 
             for (String i : createQuestionDto.getTopics()) {
-                if(! topicRepository.findByName(i).isPresent()){
-                     topic=topicRepository.save(Topic.builder().name(i).build());
 
+                Optional<Topic>topic=topicRepository.findByName(i);
+
+                if(topic.isPresent()){
+                    questionTopic.add(topic.get());
+                }else{
+                    questionTopic.add(topicRepository.save(Topic.builder().name(i).build()));
                 }
-                questionTopic.add(topic);
+
             }
 
-            System.out.println("size"+questionTopic.size());
-
+            System.out.println(questionTopic.size());
 
             question = Question.builder().user(user.get()).body(createQuestionDto.getQuestion()).topics(questionTopic).build();
 

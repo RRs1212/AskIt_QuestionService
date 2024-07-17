@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -63,17 +64,24 @@ public class QuestionController {
     }
 
     @GetMapping("/ByTopic/{topicName}")
-    public ResponseEntity<?> GetQuestionByTopic(@RequestParam String topicName){
+    public ResponseEntity<?> GetQuestionByTopic(@PathVariable String topicName){
 
         Optional<Topic> topic=topicRepository.findByName(topicName);
 
+        System.out.println(topic.isPresent());
+
+
+
         Topic t=topic.get();
+        System.out.println(t.getName());
 
-        questionService.GetQuestionBtTextandTopic(t);
+        List<Question> questionList=questionService.GetQuestionByTopic(t);
 
-
-
-       return null;
+        if(!questionList.isEmpty()){
+            return new ResponseEntity<>(questionList,HttpStatus.FOUND);
+        }else{
+            return new ResponseEntity<>("no questions found",HttpStatus.NOT_FOUND);
+        }
 
     }
     @GetMapping("/ByUserId/{userId}")

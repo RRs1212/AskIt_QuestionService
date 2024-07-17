@@ -54,10 +54,15 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Question GetQuestionBtTextandTopic(Topic topic) {
+    public List<Question> GetQuestionByTopic(Topic topic) {
 
+//        Optional<Question> QuestionSByTopic =questionRepository.findByTopic(topic);
+//
+//        System.out.println(QuestionSByTopic.get().getBody());
 
-      return null;
+        Optional<List<Question>> questionByTopic=questionRepository.findQuestionByTopic(topic);
+        return questionByTopic.get();
+
 
     }
 }
